@@ -8,3 +8,4 @@ venv/
 env/
 recordings/
 ngrok.exe
+school_backup.sql
