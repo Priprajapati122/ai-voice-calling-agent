@@ -1,0 +1,8 @@
+Flask
+flask-cors
+twilio
+python-dotenv
+mysql-connector-python
+groq
+requests
+gunicorn

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Voice Agent | Login</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="login-page">
+
+    <div class="login-container">
+
+        <!-- Left Branding Section -->
+        <div class="login-brand">
+
+            <div class="brand-logo">
+                <div class="logo-icon">AI</div>
+                <span>VoiceAgent</span>
+            </div>
+
+            <div class="brand-content">
+
+                <div class="voice-orb">
+                    <div class="orb-core"></div>
+                    <div class="orb-ring ring-1"></div>
+                    <div class="orb-ring ring-2"></div>
+                    <div class="orb-ring ring-3"></div>
+                </div>
+
+                <h1>
+                    Intelligent conversations.
+                    <span>Automated.</span>
+                </h1>
+
+                <p>
+                    Make intelligent outbound calls, interact with customers,
+                    and manage every conversation from one place.
+                </p>
+
+                <div class="feature-list">
+
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <span>AI-powered voice conversations</span>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <span>Knowledge Base integration</span>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <span>Call recording & analytics</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="brand-footer">
+                © 2026 AI Voice Agent
+            </div>
+
+        </div>
+
+
+        <!-- Login Section -->
+        <div class="login-section">
+
+            <div class="login-card">
+
+                <div class="mobile-logo">
+                    <div class="logo-icon">AI</div>
+                    <span>VoiceAgent</span>
+                </div>
+
+                <div class="login-header">
+
+                    <span class="eyebrow">WELCOME BACK</span>
+
+                    <h2>Sign in</h2>
+
+                    <p>
+                        Sign in to access your AI Voice Calling Agent.
+                    </p>
+
+                </div>
+
+
+                <form id="loginForm">
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email address
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">✉</span>
+
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="admin@example.com"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <div class="label-row">
+
+                            <label for="password">
+                                Password
+                            </label>
+
+                            <a href="#" onclick="return false;">
+                                Forgot password?
+                            </a>
+
+                        </div>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">◆</span>
+
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="Enter your password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="togglePassword"
+                            >
+                                Show
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="login-error"
+                        id="loginError"
+                    ></div>
+
+
+                    <button
+                        type="submit"
+                        class="login-button"
+                    >
+
+                        <span>Sign in to dashboard</span>
+
+                        <span class="button-arrow">→</span>
+
+                    </button>
+
+                </form>
+
+
+                <div class="security-note">
+
+                    <span>●</span>
+
+                    <p>
+                        Secure access to your voice agent platform
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+<script>
+
+    const loginForm = document.getElementById("loginForm");
+
+    const loginError = document.getElementById("loginError");
+
+    const togglePassword =
+        document.getElementById("togglePassword");
+
+    const password =
+        document.getElementById("password");
+
+
+    /* Password visibility */
+
+    togglePassword.addEventListener("click", () => {
+
+        if (password.type === "password") {
+
+            password.type = "text";
+
+            togglePassword.textContent = "Hide";
+
+        } else {
+
+            password.type = "password";
+
+            togglePassword.textContent = "Show";
+
+        }
+
+    });
+
+
+    /* Login */
+
+    loginForm.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        loginError.classList.remove("show");
+        loginError.textContent = "";
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const passwordValue =
+            document.getElementById("password").value;
+
+
+        try {
+
+            const response = await fetch(
+                "http://127.0.0.1:5000/login",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        email: email,
+                        password: passwordValue
+                    })
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (data.success) {
+
+                localStorage.setItem(
+                    "voiceAgentLoggedIn",
+                    "true"
+                );
+
+                window.location.href = "dashboard.html";
+
+            } else {
+
+                loginError.textContent =
+                    data.message || "Invalid email or password.";
+
+                loginError.classList.add("show");
+
+            }
+
+
+        } catch (error) {
+
+            console.error("Login Error:", error);
+
+            loginError.textContent =
+                "Unable to connect to the server.";
+
+            loginError.classList.add("show");
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

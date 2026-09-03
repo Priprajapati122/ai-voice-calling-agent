@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | AI VoiceAgent</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #080b12;
+            color: #f5f7fb;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: #0d111a;
+            border-right: 1px solid #1d2635;
+            padding: 25px 16px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px 30px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1683ff, #00d9ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 0 25px rgba(0, 174, 255, 0.25);
+        }
+
+        .brand-text h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: #7f8ba3;
+        }
+
+        .nav-title {
+            font-size: 11px;
+            color: #667085;
+            padding: 10px 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 14px;
+            margin: 5px 0;
+            border-radius: 10px;
+            color: #9ca8bb;
+            text-decoration: none;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: #151c28;
+            color: #ffffff;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(
+                90deg,
+                rgba(26, 133, 255, 0.18),
+                rgba(0, 217, 255, 0.05)
+            );
+            color: #42b8ff;
+            border: 1px solid rgba(35, 153, 255, 0.15);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+        }
+
+        .logout-btn {
+            width: 100%;
+            border: 1px solid #202a3a;
+            background: #111722;
+            color: #aab4c5;
+            padding: 11px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .logout-btn:hover {
+            background: #191f2c;
+            color: #ffffff;
+        }
+
+        /* MAIN */
+
+        .main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 35px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 35px;
+        }
+
+        .welcome h1 {
+            margin: 0 0 7px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .welcome p {
+            margin: 0;
+            color: #7e899d;
+            font-size: 14px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1683ff, #00d9ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .profile-info strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .profile-info span {
+            color: #69758a;
+            font-size: 11px;
+        }
+
+        /* STAT CARDS */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: #0e131d;
+            border: 1px solid #1c2635;
+            border-radius: 14px;
+            padding: 22px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            right: -25px;
+            top: -25px;
+            border-radius: 50%;
+            background: rgba(0, 174, 255, 0.05);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-label {
+            color: #7d899d;
+            font-size: 13px;
+        }
+
+        .stat-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: #131d2b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-value {
+            margin-top: 15px;
+            font-size: 27px;
+            font-weight: 600;
+        }
+
+        .stat-description {
+            margin-top: 7px;
+            font-size: 11px;
+            color: #657187;
+        }
+
+        /* CONTENT GRID */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 330px;
+            gap: 20px;
+        }
+
+        .panel {
+            background: #0e131d;
+            border: 1px solid #1c2635;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid #1b2432;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .panel-header a {
+            color: #2da8ff;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        /* RECENT CALLS */
+
+        .calls-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .calls-table th {
+            text-align: left;
+            padding: 14px 20px;
+            color: #647085;
+            font-size: 11px;
+            font-weight: 500;
+            border-bottom: 1px solid #182130;
+        }
+
+        .calls-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #151d2a;
+            font-size: 13px;
+            color: #b9c1cf;
+        }
+
+        .calls-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .phone-number {
+            color: #e9edf4;
+            font-weight: 500;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            text-transform: capitalize;
+        }
+
+        .status.completed {
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+        }
+
+        .status.failed {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+        }
+
+        .status.in-progress,
+        .status.ringing,
+        .status.initiated {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 45px 20px;
+            color: #667085;
+            font-size: 13px;
+        }
+
+        /* QUICK ACTIONS */
+
+        .quick-actions {
+            padding: 18px;
+        }
+
+        .action-card {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 15px;
+            border: 1px solid #1d2736;
+            border-radius: 11px;
+            background: #101620;
+            text-decoration: none;
+            color: white;
+            margin-bottom: 12px;
+            transition: 0.2s;
+        }
+
+        .action-card:hover {
+            border-color: #1683ff;
+            transform: translateY(-1px);
+        }
+
+        .action-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: #152337;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-text strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .action-text span {
+            font-size: 11px;
+            color: #68758a;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 750px) {
+            .sidebar {
+                width: 70px;
+                padding: 15px 8px;
+            }
+
+            .brand-text,
+            .nav-title,
+            .nav-item span,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .brand {
+                justify-content: center;
+                padding-bottom: 20px;
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+            .main-content {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .profile-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+
+            <div class="brand-text">
+                <h2>AI VoiceAgent</h2>
+                <span>Intelligent Calling Platform</span>
+            </div>
+        </div>
+
+        <div class="nav-title">Main Menu</div>
+
+        <a href="dashboard.html" class="nav-item active">
+            <div class="nav-icon">⌂</div>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="make-call.html" class="nav-item">
+            <div class="nav-icon">☎</div>
+            <span>Make a Call</span>
+        </a>
+
+        <a href="knowledge-base.html" class="nav-item">
+            <div class="nav-icon">▤</div>
+            <span>Knowledge Base</span>
+        </a>
+
+        <a href="call-history.html" class="nav-item">
+            <div class="nav-icon">◷</div>
+            <span>Call History</span>
+        </a>
+
+        <div class="nav-title" style="margin-top: 18px;">System</div>
+
+       <a href="http://localhost:5000/settings" class="nav-item">
+    Settings
+</a>
+
+        <div class="sidebar-bottom">
+            <button class="logout-btn" onclick="logout()">
+                Logout
+            </button>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <div class="topbar">
+
+            <div class="welcome">
+                <h1 id="greeting">Good Evening, Admin</h1>
+                <p>Manage your AI voice conversations and calling activity.</p>
+            </div>
+
+            <div class="profile">
+
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div class="profile-info">
+                    <strong>Admin</strong>
+                    <span>Administrator</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <span class="stat-label">Total Calls</span>
+                    <div class="stat-icon">☎</div>
+                </div>
+
+                <div class="stat-value" id="totalCalls">
+                    0
+                </div>
+
+                <div class="stat-description">
+                    All calls made through the system
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <span class="stat-label">Completed Calls</span>
+                    <div class="stat-icon">✓</div>
+                </div>
+
+                <div class="stat-value" id="completedCalls">
+                    0
+                </div>
+
+                <div class="stat-description">
+                    Successfully completed calls
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <span class="stat-label">Failed Calls</span>
+                    <div class="stat-icon">!</div>
+                </div>
+
+                <div class="stat-value" id="failedCalls">
+                    0
+                </div>
+
+                <div class="stat-description">
+                    Calls that were unsuccessful
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <span class="stat-label">Total Duration</span>
+                    <div class="stat-icon">◷</div>
+                </div>
+
+                <div class="stat-value" id="totalDuration">
+                    0m
+                </div>
+
+                <div class="stat-description">
+                    Total conversation time
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RECENT CALLS + QUICK ACTIONS -->
+        <section class="content-grid">
+
+            <!-- RECENT CALLS -->
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h3>Recent Calls</h3>
+
+                    <a href="call-history.html">
+                        View All
+                    </a>
+
+                </div>
+
+                <div id="recentCallsContainer">
+
+                    <div class="empty-state">
+                        Loading call history...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h3>Quick Actions</h3>
+                </div>
+
+                <div class="quick-actions">
+
+                    <a href="make-call.html" class="action-card">
+
+                        <div class="action-icon">
+                            ☎
+                        </div>
+
+                        <div class="action-text">
+                            <strong>Make a Call</strong>
+                            <span>Start a new AI call</span>
+                        </div>
+
+                    </a>
+
+
+                    <a href="knowledge-base.html" class="action-card">
+
+                        <div class="action-icon">
+                            +
+                        </div>
+
+                        <div class="action-text">
+                            <strong>Add Knowledge</strong>
+                            <span>Update AI knowledge base</span>
+                        </div>
+
+                    </a>
+
+
+                    <a href="call-history.html" class="action-card">
+
+                        <div class="action-icon">
+                            ◷
+                        </div>
+
+                        <div class="action-text">
+                            <strong>Call History</strong>
+                            <span>View previous conversations</span>
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="dashboard.js"></script>
+
+</body>
+</html>

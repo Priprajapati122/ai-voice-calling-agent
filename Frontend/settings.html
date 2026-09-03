@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settings - VoiceAgent</title>
+
+    <link rel="stylesheet" href="http://127.0.0.1:5500/Frontend/style.css">
+
+    <style>
+        .settings-container {
+            min-height: 100vh;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .settings-content {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .settings-header {
+            margin-bottom: 30px;
+        }
+
+        .settings-header h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .settings-header p {
+            margin: 0;
+            color: #8b95a7;
+            font-size: 14px;
+        }
+
+        .settings-card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .settings-card h2 {
+            margin: 0 0 6px;
+            font-size: 19px;
+        }
+
+        .settings-description {
+            color: #7f8a9c;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group small {
+            display: block;
+            color: #7f8a9c;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            box-sizing: border-box;
+            background: #0b1220;
+            color: #ffffff;
+            border: 1px solid #293548;
+            border-radius: 9px;
+            padding: 12px 14px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #3b82f6;
+        }
+
+        .save-section {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .save-message {
+            display: none;
+            color: #22c55e;
+            font-size: 14px;
+        }
+
+        .save-btn {
+            border: none;
+            border-radius: 9px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 700px) {
+            .settings-container {
+                padding: 20px;
+            }
+
+            .settings-card {
+                padding: 20px;
+            }
+
+            .save-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .save-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="settings-container">
+
+    <div class="settings-content">
+
+        <div class="settings-header">
+            <h1>Settings</h1>
+            <p>Manage your account credentials and security.</p>
+        </div>
+
+
+        <!-- ACCOUNT SETTINGS -->
+
+        <div class="settings-card">
+
+            <h2>Account Settings</h2>
+
+            <div class="settings-description">
+                Update your login credentials.
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email / Login ID
+                </label>
+
+                <small>
+                    Email address used to sign in to the VoiceAgent dashboard.
+                </small>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter email address"
+                >
+
+            </div>
+
+
+            <!-- Current Password -->
+
+            <div class="form-group">
+
+                <label for="currentPassword">
+                    Current Password
+                </label>
+
+                <input
+                    type="password"
+                    id="currentPassword"
+                    placeholder="Enter current password"
+                >
+
+            </div>
+
+
+            <!-- New Password -->
+
+            <div class="form-group">
+
+                <label for="newPassword">
+                    New Password
+                </label>
+
+                <input
+                    type="password"
+                    id="newPassword"
+                    placeholder="Enter new password"
+                >
+
+            </div>
+
+
+            <!-- Confirm Password -->
+
+            <div class="form-group">
+
+                <label for="confirmPassword">
+                    Confirm New Password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm new password"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- SAVE -->
+
+        <div class="save-section">
+
+            <span
+                id="saveMessage"
+                class="save-message"
+            >
+                ✓ Changes saved
+            </span>
+
+            <button
+                class="save-btn"
+                onclick="saveSettings()"
+            >
+                Save Changes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="http://127.0.0.1:5500/Frontend/settings.js"></script>
+
+</body>
+</html>

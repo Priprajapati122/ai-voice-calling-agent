@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Call | AI VoiceAgent</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #080b12;
+            color: #f5f7fb;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .layout {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: #0d111a;
+            border-right: 1px solid #1d2635;
+            padding: 25px 16px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px 30px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1683ff, #00d9ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 0 25px rgba(0, 174, 255, 0.25);
+        }
+
+        .brand-text h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: #7f8ba3;
+        }
+
+        .nav-title {
+            font-size: 11px;
+            color: #667085;
+            padding: 10px 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 14px;
+            margin: 5px 0;
+            border-radius: 10px;
+            color: #9ca8bb;
+            text-decoration: none;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: #151c28;
+            color: #ffffff;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(
+                90deg,
+                rgba(26, 133, 255, 0.18),
+                rgba(0, 217, 255, 0.05)
+            );
+            color: #42b8ff;
+            border: 1px solid rgba(35, 153, 255, 0.15);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+        }
+
+        .logout-btn {
+            width: 100%;
+            border: 1px solid #202a3a;
+            background: #111722;
+            color: #aab4c5;
+            padding: 11px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .logout-btn:hover {
+            background: #191f2c;
+            color: white;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 35px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #7e899d;
+            font-size: 14px;
+        }
+
+        /* CALL AREA */
+
+        .call-wrapper {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .call-card {
+            background: #0e131d;
+            border: 1px solid #1c2635;
+            border-radius: 18px;
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .call-card::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            right: -150px;
+            top: -150px;
+            border-radius: 50%;
+            background: rgba(0, 174, 255, 0.05);
+            pointer-events: none;
+        }
+
+        .call-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #1683ff, #00cfff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 22px;
+            box-shadow: 0 0 35px rgba(0, 174, 255, 0.18);
+        }
+
+        .call-card h2 {
+            margin: 0 0 8px;
+            font-size: 22px;
+        }
+
+        .call-card > p {
+            margin: 0 0 28px;
+            color: #788499;
+            font-size: 13px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 13px;
+            color: #b8c1d0;
+        }
+
+        .phone-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: #0a0f17;
+            border: 1px solid #273244;
+            border-radius: 11px;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+
+        .phone-input-wrapper:focus-within {
+            border-color: #1683ff;
+            box-shadow: 0 0 0 3px rgba(22, 131, 255, 0.08);
+        }
+
+        .country-code {
+            padding: 0 15px;
+            color: #8e9aad;
+            font-size: 13px;
+            border-right: 1px solid #273244;
+            height: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        #phoneNumber {
+            flex: 1;
+            height: 50px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: white;
+            padding: 0 15px;
+            font-size: 15px;
+        }
+
+        #phoneNumber::placeholder {
+            color: #4f5c70;
+        }
+
+        .start-call-btn {
+            width: 100%;
+            height: 52px;
+            margin-top: 22px;
+            border: none;
+            border-radius: 11px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #1683ff, #00bfe8);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+            box-shadow: 0 8px 25px rgba(0, 137, 255, 0.18);
+        }
+
+        .start-call-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 30px rgba(0, 137, 255, 0.28);
+        }
+
+        .start-call-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* STATUS */
+
+        .status-box {
+            margin-top: 25px;
+            padding: 18px;
+            background: #0a0f17;
+            border: 1px solid #1c2736;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .status-box.show {
+            display: block;
+        }
+
+        .status-title {
+            font-size: 12px;
+            color: #6f7c91;
+            margin-bottom: 8px;
+        }
+
+        .status-message {
+            font-size: 14px;
+            color: #d7deea;
+        }
+
+        .status-message.success {
+            color: #4ade80;
+        }
+
+        .status-message.error {
+            color: #f87171;
+        }
+
+        /* INFO */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            padding: 18px;
+            background: #0e131d;
+            border: 1px solid #1c2635;
+            border-radius: 13px;
+        }
+
+        .info-card-icon {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .info-card strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .info-card span {
+            color: #68758a;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 15px 8px;
+            }
+
+            .brand-text,
+            .nav-title,
+            .nav-item span,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .brand {
+                justify-content: center;
+                padding-bottom: 20px;
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+            .main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+                padding: 20px;
+            }
+
+            .call-card {
+                padding: 25px 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+
+            <div class="brand-text">
+                <h2>AI VoiceAgent</h2>
+                <span>Intelligent Calling Platform</span>
+            </div>
+        </div>
+
+        <div class="nav-title">Main Menu</div>
+
+        <a href="dashboard.html" class="nav-item">
+            <div class="nav-icon">⌂</div>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="make-call.html" class="nav-item active">
+            <div class="nav-icon">☎</div>
+            <span>Make a Call</span>
+        </a>
+
+        <a href="knowledge-base.html" class="nav-item">
+            <div class="nav-icon">▤</div>
+            <span>Knowledge Base</span>
+        </a>
+
+        <a href="call-history.html" class="nav-item">
+            <div class="nav-icon">◷</div>
+            <span>Call History</span>
+        </a>
+
+        <div class="nav-title" style="margin-top: 18px;">System</div>
+
+        <a href="#" class="nav-item">
+            <div class="nav-icon">⚙</div>
+            <span>Settings</span>
+        </a>
+
+        <div class="sidebar-bottom">
+            <button class="logout-btn" onclick="logout()">
+                Logout
+            </button>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <div class="page-header">
+            <h1>Make a Call</h1>
+            <p>Start an outbound AI voice conversation with any mobile number.</p>
+        </div>
+
+
+        <div class="call-wrapper">
+
+            <div class="call-card">
+
+                <div class="call-icon">
+                    ☎
+                </div>
+
+                <h2>Start a New Call</h2>
+
+                <p>
+                    Enter the recipient's mobile number and start an AI-powered
+                    voice conversation.
+                </p>
+
+
+                <label class="form-label" for="phoneNumber">
+                    Mobile Number
+                </label>
+
+                <div class="phone-input-wrapper">
+
+                    <div class="country-code">
+                        +91
+                    </div>
+
+                    <input
+                        type="tel"
+                        id="phoneNumber"
+                        placeholder="Enter 10 digit mobile number"
+                        maxlength="10"
+                        autocomplete="tel"
+                    >
+
+                </div>
+
+
+                <button
+                    class="start-call-btn"
+                    id="startCallBtn"
+                    onclick="startCall()"
+                >
+                    ☎ &nbsp; Start AI Call
+                </button>
+
+
+                <div class="status-box" id="statusBox">
+
+                    <div class="status-title">
+                        CALL STATUS
+                    </div>
+
+                    <div
+                        class="status-message"
+                        id="statusMessage"
+                    >
+                        Ready to make a call.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-grid">
+
+                <div class="info-card">
+
+                    <div class="info-card-icon">
+                        🎙️
+                    </div>
+
+                    <strong>AI Conversation</strong>
+
+                    <span>
+                        The agent can interact with the person through
+                        a voice conversation.
+                    </span>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <div class="info-card-icon">
+                        🔊
+                    </div>
+
+                    <strong>Call Recording</strong>
+
+                    <span>
+                        Calls can be recorded and accessed later
+                        from Call History.
+                    </span>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <div class="info-card-icon">
+                        📝
+                    </div>
+
+                    <strong>Conversation History</strong>
+
+                    <span>
+                        Call details, transcript and summary will be
+                        available after the call.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="make-call.js"></script>
+
+</body>
+</html>
