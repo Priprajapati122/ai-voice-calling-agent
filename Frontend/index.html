@@ -203,6 +203,15 @@
         document.getElementById("password");
 
 
+    /* API URL */
+
+    const API_BASE_URL =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+            ? "http://127.0.0.1:5000"
+            : "/api";
+
+
     /* Password visibility */
 
     togglePassword.addEventListener("click", () => {
@@ -231,7 +240,9 @@
         event.preventDefault();
 
         loginError.classList.remove("show");
+
         loginError.textContent = "";
+
 
         const email =
             document.getElementById("email").value.trim();
@@ -243,7 +254,7 @@
         try {
 
             const response = await fetch(
-                "http://127.0.0.1:5000/login",
+                `${API_BASE_URL}/login`,
                 {
                     method: "POST",
 
@@ -271,10 +282,12 @@
 
                 window.location.href = "dashboard.html";
 
+
             } else {
 
                 loginError.textContent =
-                    data.message || "Invalid email or password.";
+                    data.message ||
+                    "Invalid email or password.";
 
                 loginError.classList.add("show");
 
@@ -283,7 +296,10 @@
 
         } catch (error) {
 
-            console.error("Login Error:", error);
+            console.error(
+                "Login Error:",
+                error
+            );
 
             loginError.textContent =
                 "Unable to connect to the server.";
