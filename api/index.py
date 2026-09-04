@@ -10,6 +10,7 @@ class StripAPIPrefix:
 
         if path == "/api":
             environ["PATH_INFO"] = "/"
+
         elif path.startswith("/api/"):
             environ["PATH_INFO"] = path[4:]
 
